@@ -7,6 +7,7 @@ import (
 	"os"
 	"strconv"
 	"example/metrics"
+	"container/list"
 )
 
 func main(){
@@ -21,26 +22,25 @@ func main(){
 
 func index(w http.ResponseWriter, r *http.Request) {
 	timer:=metrics.NewAdmissionLatency()
-	metrics.RequestIncrease()
 	num:=os.Getenv("Num")
+	l:=list.New()
 	if num==""{
-		Fibonacci(10)
+	    l.PushBack(0)
+		metrics.RequestIncrease()
 		_,err:=w.Write([]byte("there is no env Num. Computation successed\n"))
 		if err!=nil{
 			log.Println("err:"+err.Error()+" No\n")
 		}
 	}else{
 		numInt,_:=strconv.Atoi(num)
-		Fibonacci(numInt)
+		for i := 1; i <= numInt; i++ {
+			l.PushBack(i)
+			metrics.RequestIncrease()
+		}
 		_,err:=w.Write([]byte("there is env Num. Computation successed\n"))
 		if err!=nil{
 			log.Println("err:"+err.Error()+" Yes\n")
 		}
 	}
 	timer.Observe()
-}
-
-func Fibonacci(n int)int{
-	n=n+1
-	return n
 }
