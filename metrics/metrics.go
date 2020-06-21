@@ -8,8 +8,8 @@ import (
 var (
 	requestCount = prometheus.NewCounterVec(
 		prometheus.CounterOpts{
-			Name:      "request_total",
-			Help:      "Number of request processed by this service.",
+			Name:      "push_total",
+			Help:      "Number of push.",
 		}, []string{},
 	)
 
